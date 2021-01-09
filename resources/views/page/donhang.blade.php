@@ -19,9 +19,8 @@
 	<div class="container">
 		<div id="content">
 			
-			<form action="{{route('dathang')}}" method="post" class="beta-form-checkout">
-				@csrf
-			
+			<form method="post" class="beta-form-checkout" >
+				 {{ csrf_field() }}
 					<div class="col-sm-6">
 						<h4>Đặt hàng</h4>
 						<div class="space20">&nbsp;</div>
@@ -32,19 +31,19 @@
 						</div>
 						<div class="form-block">
 							<label>Giới tính </label>
-							<input id="gender" type="radio" class="input-radio" name="gender" value="nam" checked="checked" style="width: 10%"><span style="margin-right: 10%">Nam</span>
-							<input id="gender" type="radio" class="input-radio" name="gender" value="nữ" style="width: 10%"><span>Nữ</span>
+							<input id="gender" type="radio" class="input-radio" name="gender" value="Nam" checked="checked" style="width: 10%"><span style="margin-right: 10%">Nam</span>
+							<input id="gender" type="radio" class="input-radio" name="gender" value="Nữ" style="width: 10%"><span>Nữ</span>
 										
 						</div>
 
 						<div class="form-block">
 							<label for="email">Email</label>
-							<input type="email" id="email" name="email" placeholder="expample@gmail.com">
+							<input type="email" id="email" name="email" placeholder="expample@gmail.com" required>
 						</div>
 
 						<div class="form-block">
-							<label for="adress">Địa chỉ*</label>
-							<input type="text" id="adress" name="address" placeholder="Street Address" required>
+							<label for="address">Địa chỉ*</label>
+							<input type="text" id="address" name="address" placeholder="Street Address" required>
 						</div>
 						
 
@@ -57,6 +56,9 @@
 							<label for="notes">Ghi chú</label>
 							<textarea id="notes" name="note"></textarea>
 						</div>
+						<!-- show ket qua -->
+						<div id="show"></div>
+						<!-- end show -->
 					</div>
 					<div class="col-sm-6">
 						<div class="your-order">
@@ -64,37 +66,26 @@
 							<div class="your-order-body" style="padding: 0px 10px">
 								<div class="your-order-item">
 									<div>
-									<!--  one item	 -->
-										@if(Session::has('cart'))
-								@foreach($product_cart as $cart)
-								<!--  one item	 -->
-									<div class="media">
-										<img width="25%" src="source/image/product/{{$cart['item']['image']}}" alt="" class="pull-left">
-										<div class="media-body">
-											<p class="font-large">{{$cart['item']['name']}}</p>
-											<span class="color-gray your-order-info">Đơn giá: {{number_format($cart['price'])}} đồng</span>
-											<span class="color-gray your-order-info">Số lượng: {{$cart['qty']}}</span>
+										<!-- product get server-->
+										<div class="media" id="product_bill">
+											
 										</div>
+										<!-- end product -->
+	
 									</div>
-								<!-- end one item -->
-								@endforeach
-								@endif
-									<!-- end one item -->
-									</div>
-									<div class="clearfix"></div>
-								</div>
-								<div class="your-order-item">
-									<div class="pull-left"><p class="your-order-f18">Tổng tiền:</p></div>
-									<div class="pull-right"><h5 class="color-black">@if(Session::has('cart')){{number_format($totalPrice)}}@else 0 @endif đồng</h5></div>
-									<div class="clearfix"></div>
-								</div>
+								<div class="clearfix"></div>
 							</div>
+							<div class="your-order-item">
+								<div class="pull-left"><p class="your-order-f18">Tổng tiền:</p></div>
+								<div class="pull-right"><h5 class="color-black"><div id="totalPrice_"></div></h5>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
 							
 							<div class="your-order-head"><h5>Hình thức thanh toán</h5></div>
 							
 							<div class="your-order-body">
-								<ul class="payment_methods methods">
-									<li class="payment_method_bacs">
 										<input id="payment_method_bacs" type="radio" class="input-radio" name="payment_method" value="COD" checked="checked" data-order_button_text="">
 										<label for="payment_method_bacs">Thanh toán khi nhận hàng </label>
 										<div class="payment_box payment_method_bacs" style="display: block;">
@@ -117,7 +108,7 @@
 							</div>
 
 							<div class="text-center">
-							 <button type="submit" id="dathang" class="beta-btn primary" href="{{route('trang-chu')}}">Đặt hàng <i class="fa fa-chevron-right"> </i></button></div>
+							 <button type="submit" id="dathang" class="beta-btn primary" onclick="dathang_()" >Đặt hàng <i class="fa fa-chevron-right"> </i></button></div>
 							
 
 						</div> <!-- .your-order -->
@@ -128,7 +119,83 @@
 	</div> <!-- .container -->
 
 	
+<script type="text/javascript">
+var obj,totalPrice, xmlhttp, product;
+//dbParam = JSON.stringify(obj);
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+  	product=JSON.parse(this.responseText);
+  	obj = "";
+  	totalPrice = "";
+  	if(product != null){
+	  	for (var pro in product.items){
+	  		obj += '<div class="media"><img width="25%" src="source/image/product/' + product.items[pro].item.image + '" alt="" class="pull-left">'
+	  		 + '<div class="media-body"><p class="font-large">' + product.items[pro].item.name 
+	  		 + '</p><span class="color-gray your-order-info">Đơn giá: ' + product.items[pro].price 
+	  		 + ' Đồng</span><span class="color-gray your-order-info">Số lượng: ' + product.items[pro].qty
+	  		 + '</span></div></div>'
+	  		
+	  	}
+
+	  	totalPrice += product.totalPrice;
+  	}else{
+  		totalPrice += "0";
+  	}
+  	totalPrice += " Đồng"
+    document.getElementById("product_bill").innerHTML = obj;
+    document.getElementById("totalPrice_").innerHTML = totalPrice;
+  }
+};
+xmlhttp.open("GET", "http://localhost/WebsiteLaravel/public/server", true);
+xmlhttp.send();
+
+</script>
+
+<script type="text/javascript">
+function telephoneCheck(str) {
+	  var a = /^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(str);
+	  return a;
+}
+function dathang_(){
+	var http, myObj, dbParam, json_input_data = {};
+	json_input_data.name = document.getElementById("name").value;
+	json_input_data.gender = document.querySelector('input[id = "gender"]:checked').value;
+	json_input_data.email = document.getElementById("email").value;
+	json_input_data.address = document.getElementById("address").value;
+	json_input_data.phone = document.getElementById("phone").value;
+	json_input_data.note = document.getElementById("notes").value;
+	json_input_data.payment = document.querySelector('input[name = "payment_method"]:checked').value;
+
+	if(json_input_data.name === "" || json_input_data.email === "" || json_input_data.phone === "" || json_input_data.address === ""){
+
+		console.log("nhap dung di ban oi!");
 	
+	}
 	
+	else {
+
+		dbParam = JSON.stringify(json_input_data);
+		
+		myObj = JSON.stringify(product);
+		http = new XMLHttpRequest();
+		http.onreadystatechange = function(){
+			if(this.readyState == 4 && this.status == 200){
+				
+				location.href = "{{route('reset_session')}}";
+			}
+		}
+		http.open("POST", "http://localhost/WebsiteLaravel/app/Http/Controllers/Request__.php",true);
+		http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		http.send("dathang="+dbParam +"&cart=" + myObj);
+		
+		
+	}
+}
+</script>
+
+<script type="text/javascript" href="https://cdn.jsdelivr.net/jquery/1.12.4/jquery.min.js">
+
+</script> 
 @endsection
 

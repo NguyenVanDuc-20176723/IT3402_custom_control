@@ -6,7 +6,6 @@
 	<title>Laravel </title>
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<base href="{{asset('')}}">
-
 	<link href='http://fonts.googleapis.com/css?family=Dosis:300,400' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
@@ -18,7 +17,7 @@
 	<link rel="stylesheet" href="source/assets/dest/css/animate.css">
 	<link rel="stylesheet" title="style" href="source/assets/dest/css/huong-style.css">
 
-
+	<link rel="stylesheet" href="source/assets/dest/calendar/css/ion.calendar.css">
 	
 </head>
 <body>
@@ -44,6 +43,10 @@
 	<script src="source/assets/dest/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
 	<script src="source/assets/dest/js/waypoints.min.js"></script>
 	<script src="source/assets/dest/js/wow.min.js"></script>
+
+	
+	
+	
 	<!--customjs-->
 	<script src="source/assets/dest/js/custom2.js"></script>
 	<script>

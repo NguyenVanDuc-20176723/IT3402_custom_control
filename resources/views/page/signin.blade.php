@@ -56,7 +56,6 @@
 							<input type="text" id="adress" name="diachi"  >
 						</div>
 
-
 						<div class="form-block">
 							<label for="phone">Số điện thoại*</label>
 							<input type="text" id="phone" name="phone" >
@@ -72,10 +71,20 @@
 						<div class="form-block">
 							<button type="submit" class="btn btn-primary" style="margin-left: 400px">Đăng ký</button>
 						</div>
+
 					</div>
 					<div class="col-sm-3"></div>
 				</div>
 			</form>
 		</div> <!-- #content -->
 	</div> <!-- .container -->
+	
+	<script src="source/assets/dest/calendar/js/moment-with-locales.min.js"></script> 
+	<script src="source/assets/dest/calendar/js/js/ion.calendar.js"></script> 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script>	
+	
+		$("#mydate").ionDatePicker();
+
+	</script>
 @endsection

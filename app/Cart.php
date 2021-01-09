@@ -28,7 +28,7 @@ class Cart
 				$giohang = $this->items[$id];
 			}
 		}
-		$giohang['qty']+=$giohang['qty']+$value;
+		$giohang['qty']+=$value;
 		if($item->promotion_price == 0){
 			$giohang['price'] = $item->unit_price * $giohang['qty'];
 		}

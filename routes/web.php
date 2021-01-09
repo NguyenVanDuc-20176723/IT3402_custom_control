@@ -47,4 +47,8 @@ Route::get('logout',['as'=>'dangxuat','uses'=>'MyController@logOut']);
 
 Route::get('search',['as'=>'timkiem','uses'=>'MyController@Search']);
 
+//--------------
+Route::get('server','Server@getDatHang');
+Route::get('reset_session',['as'=>'reset_session','uses'=>'Server@resetSession']);
+
 
